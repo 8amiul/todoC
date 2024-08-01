@@ -11,9 +11,11 @@ void printTask(FILE *file)
     while (fgets(buff, sizeof(buff), file) != NULL)
     {
         char mark;
-        char task[1024];
-        sscanf(buff, "%c,%s", &mark, task);
-        printf("[%c] %s\n", mark, task);
+        sscanf(buff, "%c", &mark);
+        printf("[%c] ", mark);
+        for (int i = 2; buff[i] != '\0'; i++)
+            printf("%c", buff[i]);
+        printf("\n");
     }
 }
 
@@ -68,5 +70,31 @@ void delTask(FILE* file, int targetLine)
     int rF = remove(FILENAME);
     int renameF = rename(TMPFILE, FILENAME);
 
+}
 
+void editTask(FILE* file, int targetLine, char *newLine)
+{
+    FILE* temp = fopen(TMPFILE, "w");
+
+    char line[1024];
+    char tmpNewLine[1024];
+    int currentLine = 1;
+    while(fgets(line, sizeof(line), file) != NULL)
+    {
+       if (currentLine == targetLine)
+        {        
+            strncpy(tmpNewLine, line, 2);
+            strcat(tmpNewLine, newLine);
+            strcat(tmpNewLine, "\n");
+            fputs(tmpNewLine, temp);
+            currentLine++;
+            continue;
+        }
+        fputs(line, temp);
+        currentLine++;
+    }
+    fclose(file);
+    fclose(temp);
+    remove(FILENAME);
+    rename(TMPFILE, FILENAME);
 }

@@ -10,9 +10,11 @@ int main(int argc, char *argv[])
     FILE* fp = fopen(FILENAME, "a+");
     
     //******ADD_TASK*******//
-    if (argc == 3 && strcmp(argv[1], "add") == 0 && strlen(argv[2]) > 0)
+    if (argc > 2 && strcmp(argv[1], "add") == 0 && strlen(argv[2]) > 0)
     {
-        addTask(fp, argv[2]);
+        char task[1024];
+        strcpy(task, argv[2]);
+        addTask(fp, task);
         fp = fopen(FILENAME, "a+");
         printTask(fp);
     }
@@ -34,6 +36,15 @@ int main(int argc, char *argv[])
     {
         long targetLine = strtol(argv[2], NULL, 10);
         delTask(fp, targetLine);
+        fp = fopen(FILENAME, "a+");
+        printTask(fp);
+    }
+    if (argc == 4 && strcmp(argv[1], "edit") == 0)
+    {
+        char newLine[1024];
+        strcpy(newLine, argv[3]);
+        long targetLine = strtol(argv[2], NULL, 10);
+        editTask(fp, targetLine, newLine);
         fp = fopen(FILENAME, "a+");
         printTask(fp);
     }
