@@ -15,7 +15,7 @@ void printTask(FILE *file)
         printf("[%c] ", mark);
         for (int i = 2; buff[i] != '\0'; i++)
             printf("%c", buff[i]);
-        printf("\n");
+        //printf("\n");
     }
 }
 
